@@ -57,9 +57,9 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope()) {
     var Departments = scope.ServiceProvider.GetService(typeof(IDepartmentService)) as IDepartmentService;
-    var Managers = scope.ServiceProvider.GetService(typeof(IEmployeeService)) as IEmployeeService;
+    var Employee = scope.ServiceProvider.GetService(typeof(IEmployeeService)) as IEmployeeService;
 
-    await SeedHelper.SeedData(departmentService: Departments, employeeService: Managers);
+    await SeedHelper.SeedData(departmentService: Departments, employeeService: Employee);
 }
 
 app.Run();

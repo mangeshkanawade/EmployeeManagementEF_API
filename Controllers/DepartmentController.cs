@@ -35,25 +35,5 @@ namespace EmployeeManagementEF.Controllers
                 return Problem(detail: ex.Message + " InnerException ==> " + ex?.InnerException?.Message, statusCode: 500);
             }
         }
-
-        [HttpPost]
-        public async Task<ActionResult<bool>> AddEmployee([FromBody] Department department)
-        {
-            try
-            {
-                var isAdded = await _departmentService.AddDepartment(department);
-
-                if (!isAdded)
-                {
-                    return Problem(detail: "Unable to add Employee");
-                }
-
-                return Ok(isAdded);
-            }
-            catch (Exception ex)
-            {
-                return Problem(detail: ex.Message + " InnerException ==> " + ex?.InnerException?.Message, statusCode: 500);
-            }
-        }
     }
 }
