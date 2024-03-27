@@ -8,7 +8,6 @@ namespace EmployeeManagementEF.Data.Models {
         [Key]
         public Guid EmployeeID { get; set; }
         public string FirstName { get; set; }
-        public string? MiddleName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string City { get; set; }
@@ -34,8 +33,10 @@ namespace EmployeeManagementEF.Data.Models {
         [ForeignKey("Employee")]
         public Guid? ManagerID { get; set; }
 
-        public string Status { get; set; }
+        [ForeignKey("EmployeeStatus")]
+        public int? StatusID { get; set; } = (int)Enumerates.EmployeeStatuses.Active;
         public virtual Department? Department { get; set; }
         public virtual Employee? Manager { get; set; }
+        public virtual EmployeeStatus? Status{ get; set; }
     }
 }

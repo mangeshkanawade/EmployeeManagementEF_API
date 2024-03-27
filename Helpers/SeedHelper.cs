@@ -1,4 +1,5 @@
-﻿using EmployeeManagementEF.Data.Models;
+﻿using System;
+using EmployeeManagementEF.Data.Models;
 using EmployeeManagementEF.Models;
 using EmployeeManagementEF.Services;
 
@@ -8,42 +9,35 @@ namespace EmployeeManagementEF.Helpers {
         public async static Task SeedData(IDepartmentService departmentService, IEmployeeService employeeService) {
             await SeedDepartments(departmentService);
             await SeedManagers(employeeService);
+            await SeedEmployeeStatuses(employeeService);
         }
 
         private async static Task SeedDepartments(IDepartmentService departmentService) {
 
-
-            if (await departmentService.GetDepartmentByIdAsync(1) is null) {
-                Department Developers = new Department() {
-                    DepartmentID = 1,
-                    Name = "Managers"
-                };
-                await departmentService.AddDepartment(Developers);
+            foreach (Enumerates.Departments department in Enum.GetValues<Enumerates.Departments>()) {
+                if (await departmentService.GetDepartmentByIdAsync((int)department) is null) {
+                    Department NewDepartment = new Department {
+                        DepartmentID= (int)department,
+                        Name = department.ToString()
+                    };
+                    await departmentService.AddDepartment(NewDepartment);
+                }
             }
 
-            if (await departmentService.GetDepartmentByIdAsync(2) is null) {
-                Department Developers = new Department() {
-                    DepartmentID = 2,
-                    Name = "Developers"
-                };
-                await departmentService.AddDepartment(Developers);
+        }
+
+        private async static Task SeedEmployeeStatuses(IEmployeeService employeeService) {
+
+            foreach (Enumerates.EmployeeStatuses status in Enum.GetValues<Enumerates.EmployeeStatuses>()) {
+                if (await employeeService.GetEmployeeStatusByIdAsync((int)status) is null) {
+                    EmployeeStatus newStatus = new EmployeeStatus {
+                        StatusID = (int)status,
+                        Status = status.ToString()
+                    };
+                    await employeeService.AddEmployeeStatus(newStatus);
+                }
             }
 
-            if (await departmentService.GetDepartmentByIdAsync(3) is null) {
-                Department QualityService = new Department() {
-                    DepartmentID = 3,
-                    Name = "Quality Service"
-                };
-                await departmentService.AddDepartment(QualityService);
-            }
-
-            if (await departmentService.GetDepartmentByIdAsync(4) is null) {
-                Department OfficeStaff = new Department() {
-                    DepartmentID = 4,
-                    Name = "Office Staff"
-                };
-                await departmentService.AddDepartment(OfficeStaff);
-            }
         }
 
         private async static Task SeedManagers(IEmployeeService employeeService) {
@@ -52,7 +46,6 @@ namespace EmployeeManagementEF.Helpers {
                 EmployeeModel NewManager = new EmployeeModel() {
                     EmployeeID = new Guid().ToString(),
                     FirstName = "Arun",
-                    MiddleName = "",
                     LastName = "Jadhav",
                     DateOfBirth = new DateTime(year: 1989, month: 01, day: 01),
                     Phone = "+918965368954",
@@ -64,7 +57,7 @@ namespace EmployeeManagementEF.Helpers {
                     DateOfJoining = new DateTime(year: 2002, month: 01, day: 01),
                     DepartmentID = 1,
                     Designation = "Project Manager",
-                    Status = "Active"
+                    StatusID = (int)Enumerates.EmployeeStatuses.Active
                 };
                 await employeeService.AddEmployee(NewManager);
             }
@@ -73,7 +66,6 @@ namespace EmployeeManagementEF.Helpers {
                 EmployeeModel NewManager = new EmployeeModel() {
                     EmployeeID = new Guid().ToString(),
                     FirstName = "Ramnath",
-                    MiddleName = "",
                     LastName = "Iyer",
                     DateOfBirth = new DateTime(year: 1990, month: 01, day: 01),
                     Phone = "+919955368954",
@@ -85,7 +77,7 @@ namespace EmployeeManagementEF.Helpers {
                     DateOfJoining = new DateTime(year: 2003, month: 01, day: 01),
                     DepartmentID = 1,
                     Designation = "Project Manager",
-                    Status = "Active"
+                    StatusID = (int)Enumerates.EmployeeStatuses.Active
                 };
                 await employeeService.AddEmployee(NewManager);
             }
@@ -94,7 +86,6 @@ namespace EmployeeManagementEF.Helpers {
                 EmployeeModel NewManager = new EmployeeModel() {
                     EmployeeID = new Guid().ToString(),
                     FirstName = "Ravindra",
-                    MiddleName = "",
                     LastName = "Sonone",
                     Phone = "+918456368954",
                     DateOfBirth = new DateTime(year: 1989, month: 06, day: 09),
@@ -106,7 +97,7 @@ namespace EmployeeManagementEF.Helpers {
                     DateOfJoining = new DateTime(year: 2008, month: 01, day: 01),
                     DepartmentID = 1,
                     Designation = "Project Manager",
-                    Status = "Active"
+                    StatusID = (int)Enumerates.EmployeeStatuses.Active
                 };
                 await employeeService.AddEmployee(NewManager);
             }
@@ -115,7 +106,6 @@ namespace EmployeeManagementEF.Helpers {
                 EmployeeModel NewManager = new EmployeeModel() {
                     EmployeeID = new Guid().ToString(),
                     FirstName = "Darrell",
-                    MiddleName = "",
                     LastName = "Fernandes",
                     Phone = "+917586368954",
                     DateOfBirth = new DateTime(year: 1992, month: 12, day: 06),
@@ -127,7 +117,7 @@ namespace EmployeeManagementEF.Helpers {
                     DateOfJoining = new DateTime(year: 2012, month: 01, day: 01),
                     DepartmentID = 1,
                     Designation = "Project Manager",
-                    Status = "Active"
+                    StatusID = (int)Enumerates.EmployeeStatuses.Active
                 };
                 await employeeService.AddEmployee(NewManager);
             }

@@ -29,6 +29,7 @@ namespace EmployeeManagementEF.Controllers
             }
         }
 
+        [Route("Managers")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Employee>>> GetManagers() {
             try {
@@ -37,6 +38,20 @@ namespace EmployeeManagementEF.Controllers
                     return NotFound();
                 }
                 return Ok(Employees);
+            } catch (Exception ex) {
+                return Problem(detail: ex.Message + " InnerException ==> " + ex?.InnerException?.Message, statusCode: 500);
+            }
+        }
+
+        [Route("Statuses")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<EmployeeStatus>>> GetStatuses() {
+            try {
+                var EmployeeStatuses = await _employeeService.GetEmployeeStatusAsync();
+                if (EmployeeStatuses == null) {
+                    return NotFound();
+                }
+                return Ok(EmployeeStatuses);
             } catch (Exception ex) {
                 return Problem(detail: ex.Message + " InnerException ==> " + ex?.InnerException?.Message, statusCode: 500);
             }
