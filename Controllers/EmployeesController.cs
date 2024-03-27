@@ -1,12 +1,6 @@
-﻿using EmployeeManagementEF.Data;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using EmployeeManagementEF.Services;
+using EmployeeManagementEF.Data.Models;
 using EmployeeManagementEF.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,48 +9,39 @@ namespace EmployeeManagementEF.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
-    {
-        private readonly AppDBContext _dbContext;
+    public class EmployeesController : ControllerBase {
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeesController(AppDBContext context)
-        {
-            _dbContext = context;
+        public EmployeesController(IEmployeeService employeeService) {
+            _employeeService = employeeService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
-        {
-            if (_dbContext.Employees == null)
-            {
-                return NotFound();
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees() {
+            try {
+                var Employees = await _employeeService.GetEmployeesAsync();
+                if (Employees == null) {
+                    return NotFound();
+                }
+                return Ok(Employees);
+            } catch (Exception ex) {
+                return Problem(detail: ex.Message + " InnerException ==> " + ex?.InnerException?.Message, statusCode: 500);
             }
-            return await _dbContext.Employees.ToListAsync();
         }
 
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+        public async Task<ActionResult<bool>> AddEmployee([FromBody] EmployeeModel employee) {
+            try {
+                var isAdded = await _employeeService.AddEmployee(employee);
 
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+                if (!isAdded) {
+                    return Problem(detail: "Unable to add Employee");
+                }
 
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                return Ok(isAdded);
+            } catch (Exception ex) {
+                return Problem(detail: ex.Message + " InnerException ==> " + ex?.InnerException?.Message, statusCode: 500);
+            }
         }
     }
 }

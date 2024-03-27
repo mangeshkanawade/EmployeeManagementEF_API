@@ -1,4 +1,4 @@
-﻿using EmployeeManagementEF.Models;
+﻿using EmployeeManagementEF.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 
