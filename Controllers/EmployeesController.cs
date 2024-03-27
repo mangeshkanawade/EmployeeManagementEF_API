@@ -29,6 +29,19 @@ namespace EmployeeManagementEF.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetManagers() {
+            try {
+                var Employees = await _employeeService.GetManagersAsync();
+                if (Employees == null) {
+                    return NotFound();
+                }
+                return Ok(Employees);
+            } catch (Exception ex) {
+                return Problem(detail: ex.Message + " InnerException ==> " + ex?.InnerException?.Message, statusCode: 500);
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<bool>> AddEmployee([FromBody] EmployeeModel employee) {
             try {

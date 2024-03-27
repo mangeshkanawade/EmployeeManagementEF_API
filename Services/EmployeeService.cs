@@ -49,5 +49,12 @@ namespace EmployeeManagementEF.Services
             return await _dbContext.Employees.Include(e => e.Manager).Include(e => e.Department).ToListAsync();
 
         }
+
+        async Task<IEnumerable<Employee>> IEmployeeService.GetManagersAsync() {
+            if (_dbContext is null) return null;
+ 
+            return await _dbContext.Employees.Include(e => e.Manager).Include(e => e.Department).Where(e=> e.ManagerID == null).ToListAsync();
+ 
+        }
     }
 }

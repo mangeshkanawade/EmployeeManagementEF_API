@@ -6,6 +6,7 @@ namespace EmployeeManagementEF.Services
     public interface IEmployeeService
     {
         Task<IEnumerable<Employee>> GetEmployeesAsync();
+        Task<IEnumerable<Employee>> GetManagersAsync();
         Task<Employee> GetEmployeeByIdAsync(int id);
         Task<Employee> GetEmployeeByEmailAsync(string email);
         Task<bool> AddEmployee(EmployeeModel employee);
