@@ -22,11 +22,10 @@ namespace EmployeeManagementEF.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EmployeeManagementEF.Models.Department", b =>
+            modelBuilder.Entity("EmployeeManagementEF.Data.Models.Department", b =>
                 {
-                    b.Property<Guid>("DepartmentID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("DepartmentID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -37,7 +36,7 @@ namespace EmployeeManagementEF.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("EmployeeManagementEF.Models.Employee", b =>
+            modelBuilder.Entity("EmployeeManagementEF.Data.Models.Employee", b =>
                 {
                     b.Property<Guid>("EmployeeID")
                         .ValueGeneratedOnAdd()
@@ -51,11 +50,14 @@ namespace EmployeeManagementEF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DateOfJoining")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("DepartmentID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("DepartmentID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Designation")
                         .IsRequired()
@@ -77,12 +79,12 @@ namespace EmployeeManagementEF.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MiddleName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
@@ -105,13 +107,13 @@ namespace EmployeeManagementEF.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("EmployeeManagementEF.Models.Employee", b =>
+            modelBuilder.Entity("EmployeeManagementEF.Data.Models.Employee", b =>
                 {
-                    b.HasOne("EmployeeManagementEF.Models.Department", "Department")
+                    b.HasOne("EmployeeManagementEF.Data.Models.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentID");
 
-                    b.HasOne("EmployeeManagementEF.Models.Employee", "Manager")
+                    b.HasOne("EmployeeManagementEF.Data.Models.Employee", "Manager")
                         .WithMany()
                         .HasForeignKey("ManagerID");
 
